@@ -133,11 +133,12 @@
             <img src="{{ url_for('static', filename='images/' + level_image) }}" alt="等級圖片" style="width:100px; height:100px;">
         </p>
 
-        <!-- 背景音樂控制 -->
+        <!-- 加入背景音樂 -->
         <audio id="bg-music" autoplay loop>
             <source src="{{ url_for('static', filename='audio/background-music.mp3') }}" type="audio/mpeg">
             您的瀏覽器不支援音樂播放。
         </audio>
+
         <button onclick="toggleMusic()">播放/暫停音樂</button>
 
         <!-- 遊戲連結 -->
@@ -219,14 +220,30 @@
     </div>
 
     <script>
-        const music = document.getElementById('bg-music');
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-            } else {
-                music.pause();
-            }
-        }
-    </script>
+         const music = document.getElementById('bg-music');
+
+// 音樂播放/暫停切換功能
+function toggleMusic() {
+    if (music.paused) {
+        music.play();
+    } else {
+        music.pause();
+    }
+}
+
+// 記錄音樂播放進度
+music.addEventListener('timeupdate', () => {
+    localStorage.setItem('musicTime', music.currentTime);
+});
+
+// 從記錄中繼續播放
+window.addEventListener('load', () => {
+    const savedTime = localStorage.getItem('musicTime');
+    if (savedTime) {
+        music.currentTime = parseFloat(savedTime);
+    }
+});
+</script>
 </body>
 </html>
+ 
